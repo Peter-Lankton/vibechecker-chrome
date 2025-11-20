@@ -1,6 +1,12 @@
 // contentScript.js
 
-console.log("[VibeChecker] content script loaded", location.href);
+const VC_DEBUG = false; // flip to true if you ever need noisy logs again
+function vcLog(...args) {
+    if (VC_DEBUG) {
+        vcLog("[VibeChecker]", ...args);
+    }
+}
+
 
 (function () {
     let pillEl = null;
@@ -25,16 +31,16 @@ console.log("[VibeChecker] content script loaded", location.href);
 
     function loadCoreIfNeeded() {
         if (hasCore()) {
-            console.log("[VibeChecker] core already present");
+            vcLog("[VibeChecker] core already present");
             return Promise.resolve(window.VibeCheckerCore);
         }
 
         if (!coreLoadPromise) {
             const url = chrome.runtime.getURL("vibechecker.js");
-            console.log("[VibeChecker] importing engine from", url);
+            vcLog("[VibeChecker] importing engine from", url);
             coreLoadPromise = import(url)
                 .then(() => {
-                    console.log(
+                    vcLog(
                         "[VibeChecker] engine import ok; VibeCheckerCore:",
                         window.VibeCheckerCore
                     );
@@ -75,9 +81,7 @@ console.log("[VibeChecker] content script loaded", location.href);
             pillEl.setAttribute("data-vc-pill", "1");
 
             Object.assign(pillEl.style, {
-                position: "fixed",          // top-right for now so it's always visible
-                top: "20px",
-                right: "20px",
+                position: "fixed",
                 zIndex: "2147483647",
                 padding: "6px 12px",
                 borderRadius: "999px",
@@ -89,17 +93,36 @@ console.log("[VibeChecker] content script loaded", location.href);
                     'system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text","Inter","Segoe UI",sans-serif',
                 boxShadow: "0 6px 14px rgba(15, 23, 42, 0.35)",
                 cursor: "pointer",
+                whiteSpace: "nowrap",
             });
 
             pillEl.addEventListener("click", onPillClick, { passive: false });
             document.documentElement.appendChild(pillEl);
 
-            console.log(
-                "[VibeChecker] pill created, rect:",
-                pillEl.getBoundingClientRect()
-            );
+            vcLog("pill created");
         }
+
+        // Position: slightly above & to the right of the selection, but clamped to viewport
+        const offsetY = 8;  // pixels above selection
+        const offsetX = 0;  // start at selection right edge
+
+        let top = rect.top - offsetY;
+        let left = rect.right + offsetX;
+
+        // Clamp so it stays on screen
+        const margin = 8;
+        const pillWidth = 120; // rough; we just need something to clamp against
+
+        if (top < margin) top = margin;
+        if (left + pillWidth > window.innerWidth - margin) {
+            left = Math.max(margin, window.innerWidth - pillWidth - margin);
+        }
+
+        pillEl.style.top = `${Math.round(top)}px`;
+        pillEl.style.left = `${Math.round(left)}px`;
+        pillEl.style.right = ""; // in case old style set this
     }
+
 
 
     function clearOverlay() {
@@ -248,7 +271,7 @@ console.log("[VibeChecker] content script loaded", location.href);
         event.stopPropagation();
 
         if (!lastSelectionText || !lastSelectionText.trim()) {
-            console.log("[VibeChecker] pill clicked but no selection");
+            vcLog("[VibeChecker] pill clicked but no selection");
             return;
         }
 
@@ -282,14 +305,29 @@ console.log("[VibeChecker] content script loaded", location.href);
     function handleSelectionChange() {
         const sel = window.getSelection();
         const preview = sel && sel.toString().slice(0, 40);
-        console.log("[VibeChecker] selectionchange:", preview);
+        vcLog("selectionchange:", preview);
 
+        // If there is no selection, hide pill & forget previous text
         if (!sel || sel.isCollapsed) {
+            lastSelectionText = "";
+            lastSelectionRect = null;
+            clearPill();
             return;
         }
 
         const text = sel.toString();
-        if (!text || !text.trim() || text.trim().length < 8) {
+        if (!text || !text.trim()) {
+            lastSelectionText = "";
+            lastSelectionRect = null;
+            clearPill();
+            return;
+        }
+
+        // Optional min length so a random click doesn't spawn a pill
+        if (text.trim().length < 8) {
+            lastSelectionText = "";
+            lastSelectionRect = null;
+            clearPill();
             return;
         }
 
@@ -300,6 +338,7 @@ console.log("[VibeChecker] content script loaded", location.href);
             return;
         }
 
+        // Do not react if selection is inside the overlay card
         if (isInsideOverlay(range.commonAncestorContainer)) {
             return;
         }
@@ -313,6 +352,7 @@ console.log("[VibeChecker] content script loaded", location.href);
         lastSelectionRect = rect;
         showPill(rect);
     }
+
 
     function debounce(fn, wait) {
         let t;
