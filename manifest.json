@@ -1,22 +1,40 @@
 {
   "manifest_version": 3,
-  "name": "VibeChecker – AI Code Vibe Check",
+  "name": "VibeChecker – AI Code Security Vibe Check",
   "version": "0.1.0",
-  "description": "Run a local security vibe check on AI-generate...code: SpookySecrets, Supabase issues, and privacy-unsafe logs.",
+  "description": "Highlight AI-generated code, run a local security vibe check, and copy a fix prompt for your AI helper. No code leaves your browser.",
   "action": {
     "default_title": "Run a VibeCheck"
   },
   "permissions": [
-    "activeTab",
-    "scripting",
     "clipboardWrite"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "https://github.com/*",
+        "https://gist.github.com/*",
+        "https://raw.githubusercontent.com/*",
+        "https://gitlab.com/*",
+        "https://bitbucket.org/*",
+
+        "https://replit.com/*",
+        "https://bolt.new/*",
+        "https://codesandbox.io/*",
+        "https://stackblitz.com/*",
+
+        "https://lovable.dev/*",
+        "https://v0.dev/*",
+
+        "https://supabase.com/*",
+        "https://*.supabase.co/*",
+        "https://console.supabase.com/*",
+
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*"
+      ],
       "js": ["contentScript.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
@@ -25,8 +43,29 @@
   "web_accessible_resources": [
     {
       "resources": ["vibechecker.js"],
-      "matches": ["<all_urls>"]
+      "matches": [
+        "https://github.com/*",
+        "https://gist.github.com/*",
+        "https://raw.githubusercontent.com/*",
+        "https://gitlab.com/*",
+        "https://bitbucket.org/*",
+
+        "https://replit.com/*",
+        "https://bolt.new/*",
+        "https://codesandbox.io/*",
+        "https://stackblitz.com/*",
+
+        "https://lovable.dev/*",
+        "https://v0.dev/*",
+
+        "https://supabase.com/*",
+        "https://*.supabase.co/*",
+        "https://console.supabase.com/*",
+
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*"
+      ]
     }
   ]
 }
-
