@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>VibeChecker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+<div class="popup-root">
+    <header class="popup-header">
+        <div class="popup-logo">
+            <span class="popup-logo-dot"></span>
+            <span class="popup-logo-text">VibeChecker</span>
+        </div>
+        <p class="popup-header-sub">
+            Paste AI code or use the current selection. We’ll run a local VibeCheck.
+        </p>
+    </header>
+
+    <main class="popup-main">
+        <div class="popup-grid">
+        <textarea
+                id="vibeCode"
+                class="vibe-input"
+                rows="8"
+                placeholder="Paste AI-generated code here or open popup with a selection…"
+        ></textarea>
+
+            <div class="vibe-side">
+                <button id="runVibeCheck" class="btn btn-primary" type="button">
+                    Run VibeCheck
+                </button>
+                <p class="vibe-side-hint">
+                    Runs locally in this popup. Your code is not sent to a server.
+                </p>
+            </div>
+        </div>
+
+        <div class="vibe-result-shell">
+            <div id="vibeResult" class="vibe-result">
+                <p class="vibe-placeholder">
+                    After you run a VibeCheck, you’ll see the VibeLevel and findings here.
+                </p>
+            </div>
+            <div class="vibe-result-actions">
+                <button
+                        id="copyFixPrompt"
+                        class="btn btn-vibe-copy"
+                        type="button"
+                        disabled
+                >
+                    Copy fix prompt for top finding
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Core engine (global) -->
+<script src="vibechecker.js"></script>
+<!-- Popup wiring -->
+<script src="popup.js"></script>
+</body>
+</html>

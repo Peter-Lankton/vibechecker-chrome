@@ -1,0 +1,191 @@
+/* VibeChecker inline overlay – scoped with vc- prefix to avoid collisions */
+
+.vc-overlay-root {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    max-width: 360px;
+    z-index: 2147483646; /* basically on top of everything */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", "Segoe UI", sans-serif;
+}
+
+.vc-overlay-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
+    padding: 0.75rem 0.85rem 0.8rem;
+    font-size: 13px;
+    color: #111827;
+}
+
+.vc-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.vc-overlay-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.vc-overlay-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #374151;
+    background: #f3f4f6;
+}
+
+.vc-overlay-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: #0f766e;
+}
+
+.vc-overlay-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.14rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* level colors */
+.vc-overlay--cursed .vc-overlay-level {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.vc-overlay--sus .vc-overlay-level {
+    color: #b45309;
+    background: #fef3c7;
+}
+
+.vc-overlay--chill .vc-overlay-level {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.vc-overlay-close {
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.vc-overlay-close:hover {
+    color: #4b5563;
+}
+
+/* mini vibe track */
+
+.vc-overlay-track {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    display: flex;
+    margin: 0.3rem 0 0.4rem;
+}
+
+.vc-overlay-track-segment {
+    flex: 1 1 0;
+}
+
+.vc-overlay-track-cursed {
+    background: #f97373;
+}
+
+.vc-overlay-track-sus {
+    background: #facc15;
+}
+
+.vc-overlay-track-chill {
+    background: #22c55e;
+}
+
+.vc-overlay-pointer {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.4);
+    transform: translate(-50%, -50%);
+}
+
+/* body */
+
+.vc-overlay-summary {
+    margin: 0 0 0.2rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.vc-overlay-findings {
+    margin: 0.2rem 0 0;
+    padding-left: 1.1rem;
+}
+
+.vc-overlay-findings li {
+    margin-bottom: 0.26rem;
+    font-size: 0.78rem;
+    color: #374151;
+}
+
+.vc-overlay-findings li span {
+    color: #6b7280;
+}
+
+/* footer */
+
+.vc-overlay-footer {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.vc-overlay-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 118, 110, 0.4);
+    background: #e0f2f1;
+    color: #0d4f49;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+}
+
+.vc-overlay-copy-btn:hover {
+    background: #b2dfdb;
+    border-color: #0f766e;
+}
+
+.vc-overlay-copy-btn.vc-overlay-copy-btn--copied {
+    background: #dcfce7;
+    border-color: #15803d;
+    color: #166534;
+}
